@@ -1,52 +1,61 @@
-const express = require("express")
-const helmet = require("helmet")
-const mongoose = require("mongoose")
-const dotenv = require("dotenv")
-const cors = require("cors")
-const bodyParser = require("body-parser")
-const cookieParser = require("cookie-parser")
+const express = require("express");
+const helmet = require("helmet");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
-const config = require("./config.js")
+const config = require("./config.js");
 
-dotenv.config()
+dotenv.config();
 
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 5001;
 
-const app = express()
+const app = express();
 
-const mongoString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@coding-blog-test-pxqht.mongodb.net/blog?retryWrites=true&w=majority`
+const mongoString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@coding-blog.ejls7vd.mongodb.net/blog?retryWrites=true&w=majority`;
 
-mongoose.connect(mongoString, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+mongoose.connect(mongoString, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+});
 
-mongoose.connection.on("error", function(err) {
+mongoose.connection.on("error", function (err) {
   if (process.env.NODE_ENV === "development") {
-    console.log(err)
+    console.log(err);
   }
-})
+});
 
-mongoose.connection.on("open", function() {
+mongoose.connection.on("open", function () {
   if (process.env.NODE_ENV === "development") {
-    console.log("Connected to database.")
+    console.log("Connected to database.");
   }
-})
+});
 
-app.use(helmet())
+app.use(helmet());
 
-app.use(cors({
-  origin: process.env.NODE_ENV === "development" ? config.devAdminURL : /admin.crfdemo\.com$/,
-  credentials: true
-}))
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "development"
+        ? config.devAdminURL
+        : /admin.crfdemo\.com$/,
+    credentials: true,
+  })
+);
 
-app.use(bodyParser.json({limit: "50mb"}))
-app.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }))
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 
-app.use(cookieParser())
+app.use(cookieParser());
 
-app.use(require("./routes/admin-user/index.js"))
-app.use(require("./routes/blog-posts/index.js"))
-app.use(require("./routes/images/index.js"))
-app.use(require("./routes/sitemap/index.js"))
+app.use(require("./routes/admin-user/index.js"));
+app.use(require("./routes/blog-posts/index.js"));
+app.use(require("./routes/images/index.js"));
+app.use(require("./routes/sitemap/index.js"));
 
 app.listen(PORT, function () {
-  console.log(`Express app listening on port ${PORT}`)
-})
+  console.log(`Express app listening on port ${PORT}`);
+});

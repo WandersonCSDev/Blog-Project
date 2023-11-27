@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^1.6.2",
     "codemirror": "^5.53.2",
     "moment": "^2.25.3",
-    "next": "^9.4.1",
+    "next": "^14.0.3",
     "react": "^16.13.1",
     "react-codemirror2": "^7.1.0",
     "react-dom": "^16.13.1"
