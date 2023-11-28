@@ -12,12 +12,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@codemirror-toolkit/react": "^0.4.2",
     "axios": "^1.6.2",
-    "codemirror": "^5.53.2",
-    "moment": "^2.25.3",
+    "caniuse-lite": "^1.0.30001565",
+    "codemirror": "^5.65.16",
+    "moment": "^2.29.4",
     "next": "^14.0.3",
-    "react": "^16.13.1",
-    "react-codemirror2": "^7.1.0",
-    "react-dom": "^16.13.1"
+    "react": "^18.2.0",
+    "react-codemirror2": "^7.3.0",
+    "react-dom": "^18.2.0"
   }
 }

@@ -15,13 +15,13 @@ const PORT = process.env.PORT || 5001;
 const app = express();
 
 const mongoString = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@coding-blog.ejls7vd.mongodb.net/blog?retryWrites=true&w=majority`;
-
+/*
 mongoose.connect(mongoString, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
 });
-
+*/
 mongoose.connection.on("error", function (err) {
   if (process.env.NODE_ENV === "development") {
     console.log(err);

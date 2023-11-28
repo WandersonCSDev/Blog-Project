@@ -17,7 +17,6 @@ const AdminUserSchema = new mongoose.Schema(
   },
   { collection: "admin-users" }
 );
-
 // Salva a senha do usuário já 'hashed' (não é interessante guardar como texto simples)
 AdminUserSchema.pre("save", function (next) {
   const user = this;

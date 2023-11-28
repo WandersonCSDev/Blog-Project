@@ -1,51 +1,51 @@
-import { Component } from "react"
-import Head from "next/head"
-import moment from "moment"
+import { Component } from "react";
+import Head from "next/head";
+import moment from "moment";
 
-import Header from "../components/header.js"
-import Sidebar from "../components/sidebar.js"
+import Header from "../components/header.js";
+import Sidebar from "../components/sidebar.js";
 
-import getAllPosts from "../api/blog-posts/getAllPosts.js"
+import getAllPosts from "../api/blog-posts/getAllPosts.js";
 
 export default class extends Component {
-  static async getInitialProps ({req, res}) {
-    const apiResult = await getAllPosts(req)
+  static async getInitialProps({ req, res }) {
+    const apiResult = await getAllPosts(req);
 
     if (!apiResult.authSuccess) {
-      res.writeHead(302, { Location: "/login" })
-      res.end()
+      res.writeHead(302, { Location: "/login" });
+      res.end();
     }
 
     return {
       activePosts: apiResult.activePosts ? apiResult.activePosts : [],
       upcomingPosts: apiResult.upcomingPosts ? apiResult.upcomingPosts : [],
-      getDataError: apiResult && apiResult.getDataError
-    }
+      getDataError: apiResult && apiResult.getDataError,
+    };
   }
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       showActivePosts: true,
-      showUpcomingPosts: false
-    }
+      showUpcomingPosts: false,
+    };
   }
 
   handleActiveBtnClick = () => {
     this.setState({
       showActivePosts: true,
-      showUpcomingPosts: false
-    })
-  }
+      showUpcomingPosts: false,
+    });
+  };
 
   handleUpcomingBtnClick = () => {
     this.setState({
       showActivePosts: false,
-      showUpcomingPosts: true
-    })
-  }
+      showUpcomingPosts: true,
+    });
+  };
 
-  render () {
+  render() {
     return (
       <div className="layout-wrapper">
         <Head>
@@ -68,13 +68,16 @@ export default class extends Component {
               </div>
             </div>
             <div className="blog-posts-list-container">
-              {
-                !this.props.getDataError ?
+              {!this.props.getDataError ? (
                 <>
                   <div className="blog-posts-list-tab-btns">
                     <div className="blog-posts-list-tab-btn-container">
                       <div
-                        className={this.state.showActivePosts ? "blog-posts-list-tab-btn active" : "blog-posts-list-tab-btn"}
+                        className={
+                          this.state.showActivePosts
+                            ? "blog-posts-list-tab-btn active"
+                            : "blog-posts-list-tab-btn"
+                        }
                         onClick={() => this.handleActiveBtnClick()}
                       >
                         <span>Active</span>
@@ -82,7 +85,11 @@ export default class extends Component {
                     </div>
                     <div className="blog-posts-list-tab-btn-container">
                       <div
-                        className={this.state.showUpcomingPosts ? "blog-posts-list-tab-btn active" : "blog-posts-list-tab-btn"}
+                        className={
+                          this.state.showUpcomingPosts
+                            ? "blog-posts-list-tab-btn active"
+                            : "blog-posts-list-tab-btn"
+                        }
                         onClick={() => this.handleUpcomingBtnClick()}
                       >
                         <span>Upcoming</span>
@@ -101,58 +108,72 @@ export default class extends Component {
                         <span></span>
                       </div>
                     </div>
-                    {
-                      this.state.showActivePosts && this.props.activePosts.length ?
-                      this.props.activePosts.map((post, index) => {
-                        return (
-                          <div key={index} className="blog-posts-list-items-table-item">
-                            <div className="blog-posts-list-items-table-item-data title">
-                              <span>{post.title}</span>
+                    {this.state.showActivePosts && this.props.activePosts.length
+                      ? this.props.activePosts.map((post, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="blog-posts-list-items-table-item"
+                            >
+                              <div className="blog-posts-list-items-table-item-data title">
+                                <span>{post.title}</span>
+                              </div>
+                              <div className="blog-posts-list-items-table-item-data date">
+                                <span>
+                                  {moment
+                                    .unix(post.dateTimestamp)
+                                    .format("MM/DD/YYYY")}
+                                </span>
+                              </div>
+                              <div className="blog-posts-list-items-table-item-data edit">
+                                <a href={`/blog/edit-post/${post.id}`}>
+                                  <span>Edit</span>
+                                </a>
+                                <span> </span>
+                              </div>
                             </div>
-                            <div className="blog-posts-list-items-table-item-data date">
-                              <span>{moment.unix(post.dateTimestamp).format('MM/DD/YYYY')}</span>
+                          );
+                        })
+                      : null}
+                    {this.state.showUpcomingPosts &&
+                    this.props.upcomingPosts.length
+                      ? this.props.upcomingPosts.map((post, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="blog-posts-list-items-table-item"
+                            >
+                              <div className="blog-posts-list-items-table-item-data title">
+                                <span>{post.title}</span>
+                              </div>
+                              <div className="blog-posts-list-items-table-item-data date">
+                                <span>
+                                  {moment
+                                    .unix(post.dateTimestamp)
+                                    .format("MM/DD/YYYY")}
+                                </span>
+                              </div>
+                              <div className="blog-posts-list-items-table-item-data edit">
+                                <a href={`/blog/edit-post/${post.id}`}>
+                                  <span>Edit</span>
+                                </a>
+                                <span> </span>
+                              </div>
                             </div>
-                            <div className="blog-posts-list-items-table-item-data edit">
-                              <a href={`/blog/edit-post/${post.id}`}>
-                                <span>Edit</span>
-                              </a>
-                              <span> ></span>
-                            </div>
-                          </div>
-                        )
-                      }) : null
-                    }
-                    {
-                      this.state.showUpcomingPosts && this.props.upcomingPosts.length ?
-                      this.props.upcomingPosts.map((post, index) => {
-                        return (
-                          <div key={index} className="blog-posts-list-items-table-item">
-                            <div className="blog-posts-list-items-table-item-data title">
-                              <span>{post.title}</span>
-                            </div>
-                            <div className="blog-posts-list-items-table-item-data date">
-                              <span>{moment.unix(post.dateTimestamp).format('MM/DD/YYYY')}</span>
-                            </div>
-                            <div className="blog-posts-list-items-table-item-data edit">
-                              <a href={`/blog/edit-post/${post.id}`}>
-                                <span>Edit</span>
-                              </a>
-                              <span> ></span>
-                            </div>
-                          </div>
-                        )
-                      }) : null
-                    }
+                          );
+                        })
+                      : null}
                   </div>
-                </> :
+                </>
+              ) : (
                 <div className="blog-posts-list-get-data-error">
                   <span>An error occurred.</span>
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
